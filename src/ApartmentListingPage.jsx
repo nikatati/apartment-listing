@@ -62,7 +62,7 @@ export default function ApartmentListingPage() {
       title: "יחידת הורים",
       description:
         "סוויטת הורים גדולה ומפנקת עם חדר רחצה צמוד. החדר מציע פרטיות מלאה ושקט, עם חלונות גדולים לנוף פתוח.",
-      videoSrc: "/videos/master-bedroom.mp4",
+      videoSrc: "/apartment-listing/videos/master-bedroom.mp4",
       reverse: true,
     },
     {
