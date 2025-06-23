@@ -56,40 +56,40 @@ const sections = [
     title: "סלון, מטבח ומרפסת שמש ראשונה",
     description:
       "חלל מרכזי מרווח ומואר עם יציאה למרפסת שמש מפנקת. המטבח מאובזר קומפלט ופתוח לסלון, אידיאלי לאירוח.",
-    videoSrc: `${process.env.PUBLIC_URL}/videos/living-room.mp4`,
+    videoSrc: "/apartment-listing/videos/living-room.mp4",
   },
   {
     title: "יחידת הורים",
     description:
       "סוויטת הורים גדולה ומפנקת עם חדר רחצה צמוד. החדר מציע פרטיות מלאה ושקט, עם חלונות גדולים לנוף פתוח.",
-    videoSrc: `${process.env.PUBLIC_URL}/videos/master-bedroom.mp4`,
+    videoSrc: "/apartment-listing/videos/master-bedroom.mp4",
     reverse: true,
   },
   {
     title: "חדרי שינה ומרפסת שמש שנייה",
     description:
       "פרוזדור המוביל לחדרי שינה נוספים, מרווחים ונעימים, עם גישה למרפסת שמש שנייה ואינטימית.",
-    videoSrc: `${process.env.PUBLIC_URL}/videos/hallway-balcony2.mp4`,
+    videoSrc: "/apartment-listing/videos/hallway-balcony2.mp4",
   },
   {
     title: "חדר רחצה מרכזי ושירותי אורחים",
     description:
       "חדר רחצה גדול ומעוצב הכולל מקלחון מודרני. בנוסף, שירותי אורחים נפרדים ומעוצבים לנוחות מקסימלית.",
-    videoSrc: `${process.env.PUBLIC_URL}/videos/bathroom.mp4`,
+    videoSrc: "/apartment-listing/videos/bathroom.mp4",
     reverse: true,
   },
   {
     title: "מרפסת שמש ראשונה",
     description:
       "מרפסת פתוחה ומוארת הצמודה לסלון המרכזי. מושלמת לבילוי נעים בשעות הבוקר והערב, עם נוף פתוח ואוויר צח.",
-    videoSrc: `${process.env.PUBLIC_URL}/videos/balcony1.mp4`,
+    videoSrc: "/apartment-listing/videos/balcony1.mp4",
     reverse: false,
   },
   {
     title: "חדר שירות",
     description:
       "חדר שירות נוח ומרווח הכולל הכנה למכונת כביסה ושטח אחסון. ממוקם בנפרד ומאפשר סדר ויעילות בבית.",
-    videoSrc: `${process.env.PUBLIC_URL}/videos/utility-room.mp4`,
+    videoSrc: "/apartment-listing/videos/utility-room.mp4",
     reverse: true,
   },
 ];
