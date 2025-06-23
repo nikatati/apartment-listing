@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/apartment-listing/static/css/main.6be31e43.css",
+    "main.js": "/apartment-listing/static/js/main.e3706dd6.js",
+    "index.html": "/apartment-listing/index.html",
+    "main.6be31e43.css.map": "/apartment-listing/static/css/main.6be31e43.css.map",
+    "main.e3706dd6.js.map": "/apartment-listing/static/js/main.e3706dd6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6be31e43.css",
+    "static/js/main.e3706dd6.js"
+  ]
+}
