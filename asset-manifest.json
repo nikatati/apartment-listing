@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/apartment-listing/static/css/main.cbc775ed.css",
-    "main.js": "/apartment-listing/static/js/main.5336d570.js",
+    "main.css": "/apartment-listing/static/css/main.7baab838.css",
+    "main.js": "/apartment-listing/static/js/main.b0bc61a9.js",
     "index.html": "/apartment-listing/index.html",
-    "main.cbc775ed.css.map": "/apartment-listing/static/css/main.cbc775ed.css.map",
-    "main.5336d570.js.map": "/apartment-listing/static/js/main.5336d570.js.map"
+    "main.7baab838.css.map": "/apartment-listing/static/css/main.7baab838.css.map",
+    "main.b0bc61a9.js.map": "/apartment-listing/static/js/main.b0bc61a9.js.map"
   },
   "entrypoints": [
-    "static/css/main.cbc775ed.css",
-    "static/js/main.5336d570.js"
+    "static/css/main.7baab838.css",
+    "static/js/main.b0bc61a9.js"
   ]
 }
