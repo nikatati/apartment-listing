@@ -43,7 +43,8 @@ const Section = ({
         <div className="video-container">
           {videoSrc ? (
             <video controls preload="metadata">
-              <source src={videoSrc} type="video/mp4" />
+              {/* #t=0.001 makes iOS Safari render the first frame instead of black */}
+              <source src={`${videoSrc}#t=0.001`} type="video/mp4" />
               הדפדפן שלך לא תומך בווידאו.
             </video>
           ) : (
