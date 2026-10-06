@@ -81,8 +81,7 @@
 
 .section-inner {
   display: flex;
-  /* mobile: text above video in every section */
-  flex-direction: column-reverse;
+  flex-direction: column;
   text-align: center;
 }
 
