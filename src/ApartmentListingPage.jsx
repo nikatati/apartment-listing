@@ -152,7 +152,7 @@ const PhotoGallery = ({ photos, highlightedRoom, onClearHighlight }) => {
           </>
         )}
       </div>
-      <ul className="gallery" aria-label="תמונות הדירה המאוכלסת">
+      <ul className="gallery" aria-label="תמונות הדירה המרוהטת">
         {photos.map((photo, index) => (
           <motion.li
             key={photo.src}
@@ -189,7 +189,7 @@ const PhotoGallery = ({ photos, highlightedRoom, onClearHighlight }) => {
                 <img src={photo.src} alt={photo.alt} loading="lazy" />
               </button>
               <figcaption>
-                <span className="gallery-badge">מאוכלס</span>
+                <span className="gallery-badge">מרוהט</span>
                 <strong>{photo.title}</strong>
                 <a
                   className="paired-link"
@@ -366,7 +366,6 @@ export default function ApartmentListingPage() {
           transition={{ duration: 0.8 }}
           className="hero-text"
         >
-          <h1>דירת החלומות שלכם מחכה לכם</h1>
           <p>דירת 4 חדרים מרווחת, משופצת ומעוצבת.</p>
         </motion.div>
       </header>
@@ -402,7 +401,6 @@ export default function ApartmentListingPage() {
           transition={{ duration: 0.7 }}
           className="intro"
         >
-          <h2>כל מה שצריך לחיים הטובים</h2>
           <p>
             דירה מדהימה שעברה שיפוץ מקיף מהיסוד. ממוקמת בלב העיר, קרובה למרכזי
             קניות ותחבורה ציבורית. עם 2 מרפסות שמש ונוף פתוח, היא מציעה איכות
@@ -411,14 +409,14 @@ export default function ApartmentListingPage() {
           <nav className="state-switch">
             <a href="#empty">הדירה ריקה</a>
             <a href="#furnished" onClick={() => setHighlightedRoom(null)}>
-              הדירה מאוכלסת
+              הדירה מרוהטת
             </a>
           </nav>
         </motion.div>
 
         <StateHeading
           id="empty"
-          title="הדירה ריקה"
+          title="תמונות כאשר הדירה ריקה"
           subtitle="סיור בכל חדרי הדירה כשהיא ריקה ומוכנה לכניסה"
         />
         {sections.map((section) => (
@@ -429,7 +427,7 @@ export default function ApartmentListingPage() {
               furnishedPhotos.some((p) => p.room === section.id)
                 ? {
                     href: `#furnished-${section.id}`,
-                    label: "לצפייה בחדר כשהוא מאוכלס",
+                    label: "לצפייה בחדר כשהוא מרוהט",
                     onClick: () => setHighlightedRoom(section.id),
                   }
                 : undefined
@@ -439,11 +437,11 @@ export default function ApartmentListingPage() {
 
         <StateHeading
           id="furnished"
-          title="הדירה מאוכלסת"
+          title="תמונות כאשר הדירה מרוהטת"
           subtitle="כך הדירה נראית כשגרים בה"
         />
         <Section
-          title="סיור בדירה המאוכלסת"
+          title="סיור בדירה המרוהטת"
           description="סרטון של הדירה מרוהטת ומעוצבת, שממחיש את הפוטנציאל של כל חלל."
           videoSrc={furnishedVideo}
         />
