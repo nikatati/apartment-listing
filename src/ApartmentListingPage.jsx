@@ -22,16 +22,8 @@ const Button = ({ children, className = "", ...props }) => (
 
 const Card = ({ children }) => <div className="card">{children}</div>;
 
-const Section = ({
-  id,
-  title,
-  description,
-  videoSrc,
-  reverse = false,
-  pairedLink,
-}) => (
+const Section = ({ title, description, videoSrc }) => (
   <motion.div
-    id={id}
     initial={{ opacity: 0, y: 50 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, amount: 0.3 }}
@@ -39,7 +31,7 @@ const Section = ({
     className="section"
   >
     <Card>
-      <div className={`section-inner ${reverse ? "reverse" : ""}`}>
+      <div className="section-inner">
         <div className="video-container">
           {videoSrc ? (
             <video controls preload="metadata">
@@ -57,15 +49,6 @@ const Section = ({
         <div className="section-text">
           <h3>{title}</h3>
           <p>{description}</p>
-          {pairedLink && (
-            <a
-              className="paired-link"
-              href={pairedLink.href}
-              onClick={pairedLink.onClick}
-            >
-              {pairedLink.label}
-            </a>
-          )}
         </div>
       </div>
     </Card>
@@ -79,7 +62,30 @@ const StateHeading = ({ id, title, subtitle }) => (
   </div>
 );
 
-const PhotoGallery = ({ photos, highlightedRoom, onClearHighlight }) => {
+const HighlightStatus = ({ message, clearLabel, onClear }) => (
+  <div className="highlight-status" aria-live="polite">
+    {message && (
+      <>
+        <span>{message}</span>
+        <button type="button" className="highlight-clear" onClick={onClear}>
+          {clearLabel}
+        </button>
+      </>
+    )}
+  </div>
+);
+
+const highlightClass = (isActive, isMatch) =>
+  !isActive ? undefined : isMatch ? "is-highlighted" : "is-dimmed";
+
+const roomTitle = (room) => sections.find((s) => s.id === room)?.title;
+
+const PhotoGallery = ({
+  photos,
+  highlightedRoom,
+  onClearHighlight,
+  onShowEmptyRoom,
+}) => {
   const [openIndex, setOpenIndex] = useState(null);
   const isOpen = openIndex !== null;
   const closeButtonRef = useRef(null);
@@ -129,29 +135,21 @@ const PhotoGallery = ({ photos, highlightedRoom, onClearHighlight }) => {
   const highlightedCount = photos.filter(
     (p) => p.room === highlightedRoom
   ).length;
-  const highlightedTitle = sections.find((s) => s.id === highlightedRoom)
-    ?.title;
+  const highlightedTitle = roomTitle(highlightedRoom);
 
   return (
     <>
-      <div className="highlight-status" aria-live="polite">
-        {highlightedCount > 0 && (
-          <>
-            <span>
-              {highlightedCount === 1
-                ? `מודגשת התמונה של "${highlightedTitle}"`
-                : `מודגשות ${highlightedCount} התמונות של "${highlightedTitle}"`}
-            </span>
-            <button
-              type="button"
-              className="highlight-clear"
-              onClick={onClearHighlight}
-            >
-              הצגת כל התמונות
-            </button>
-          </>
-        )}
-      </div>
+      <HighlightStatus
+        message={
+          highlightedCount === 0
+            ? null
+            : highlightedCount === 1
+            ? `מודגשת התמונה של "${highlightedTitle}"`
+            : `מודגשות ${highlightedCount} התמונות של "${highlightedTitle}"`
+        }
+        clearLabel="הצגת כל התמונות"
+        onClear={onClearHighlight}
+      />
       <ul className="gallery" aria-label="תמונות הדירה המרוהטת">
         {photos.map((photo, index) => (
           <motion.li
@@ -169,13 +167,10 @@ const PhotoGallery = ({ photos, highlightedRoom, onClearHighlight }) => {
             transition={{ duration: 0.5, delay: index * 0.05 }}
           >
             <figure
-              className={
-                highlightedCount === 0
-                  ? undefined
-                  : photo.room === highlightedRoom
-                  ? "is-highlighted"
-                  : "is-dimmed"
-              }
+              className={highlightClass(
+                highlightedCount > 0,
+                photo.room === highlightedRoom
+              )}
             >
               {photo.room === highlightedRoom && (
                 <span className="selected-badge">החדר שבחרת</span>
@@ -194,6 +189,7 @@ const PhotoGallery = ({ photos, highlightedRoom, onClearHighlight }) => {
                 <a
                   className="paired-link"
                   href={`#${photo.room}`}
+                  onClick={() => onShowEmptyRoom(photo.room)}
                   aria-label={`${photo.title}: מעבר לסרטון של החלל כשהוא ריק`}
                 >
                   לצפייה בחדר כשהוא ריק
@@ -253,6 +249,77 @@ const PhotoGallery = ({ photos, highlightedRoom, onClearHighlight }) => {
           </span>
         </div>
       )}
+    </>
+  );
+};
+
+const VideoGallery = ({
+  rooms,
+  highlightedRoom,
+  onClearHighlight,
+  onShowFurnishedRoom,
+}) => {
+  const isActive = rooms.some((r) => r.id === highlightedRoom);
+
+  return (
+    <>
+      <HighlightStatus
+        message={
+          isActive ? `מודגש הסרטון של "${roomTitle(highlightedRoom)}"` : null
+        }
+        clearLabel="הצגת כל הסרטונים"
+        onClear={onClearHighlight}
+      />
+      <ul className="gallery" aria-label="סרטוני הדירה הריקה">
+        {rooms.map((room, index) => {
+          const hasFurnished = furnishedPhotos.some((p) => p.room === room.id);
+          return (
+            <motion.li
+              key={room.id}
+              id={room.id}
+              className="gallery-card"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.5, delay: index * 0.05 }}
+            >
+              <figure
+                className={highlightClass(isActive, room.id === highlightedRoom)}
+              >
+                {room.id === highlightedRoom && (
+                  <span className="selected-badge">החדר שבחרת</span>
+                )}
+                <div className="gallery-video">
+                  <video
+                    controls
+                    preload="metadata"
+                    aria-label={`סרטון: ${room.title}`}
+                  >
+                    {/* #t=0.001 makes iOS Safari render the first frame instead of black */}
+                    <source src={`${room.videoSrc}#t=0.001`} type="video/mp4" />
+                    הדפדפן שלך לא תומך בווידאו.
+                  </video>
+                </div>
+                <figcaption>
+                  <span className="gallery-badge">ריק</span>
+                  <strong>{room.title}</strong>
+                  <p className="gallery-desc">{room.description}</p>
+                  {hasFurnished && (
+                    <a
+                      className="paired-link"
+                      href={`#furnished-${room.id}`}
+                      onClick={() => onShowFurnishedRoom(room.id)}
+                      aria-label={`${room.title}: מעבר לתמונות של החלל כשהוא מרוהט`}
+                    >
+                      לצפייה בחדר כשהוא מרוהט
+                    </a>
+                  )}
+                </figcaption>
+              </figure>
+            </motion.li>
+          );
+        })}
+      </ul>
     </>
   );
 };
@@ -319,7 +386,6 @@ const sections = [
     description:
       "סוויטת הורים גדולה ומפנקת עם חדר רחצה צמוד. החדר מציע פרטיות מלאה ושקט, עם חלונות גדולים לנוף פתוח.",
     videoSrc: "/apartment-listing/videos/master-bedroom.mp4",
-    reverse: true,
   },
   {
     id: "hallway-balcony2",
@@ -334,7 +400,6 @@ const sections = [
     description:
       "חדר רחצה גדול ומעוצב הכולל מקלחון מודרני. בנוסף, שירותי אורחים נפרדים ומעוצבים לנוחות מקסימלית.",
     videoSrc: "/apartment-listing/videos/bathroom.mp4",
-    reverse: true,
   },
   {
     id: "balcony1",
@@ -342,7 +407,6 @@ const sections = [
     description:
       "מרפסת פתוחה ומוארת הצמודה לסלון המרכזי. מושלמת לבילוי נעים בשעות הבוקר והערב, עם נוף פתוח ואוויר צח.",
     videoSrc: "/apartment-listing/videos/balcony1.mp4",
-    reverse: false,
   },
   {
     id: "utility-room",
@@ -350,12 +414,12 @@ const sections = [
     description:
       "חדר שירות נוח ומרווח הכולל הכנה למכונת כביסה ושטח אחסון. ממוקם בנפרד ומאפשר סדר ויעילות בבית.",
     videoSrc: "/apartment-listing/videos/utility-room.mp4",
-    reverse: true,
   },
 ];
 
 export default function ApartmentListingPage() {
-  const [highlightedRoom, setHighlightedRoom] = useState(null);
+  const [highlightedFurnished, setHighlightedFurnished] = useState(null);
+  const [highlightedEmpty, setHighlightedEmpty] = useState(null);
 
   return (
     <div dir="rtl" className="page">
@@ -406,34 +470,7 @@ export default function ApartmentListingPage() {
             קניות ותחבורה ציבורית. עם 2 מרפסות שמש ונוף פתוח, היא מציעה איכות
             חיים ללא פשרות.
           </p>
-          <nav className="state-switch">
-            <a href="#empty">הדירה ריקה</a>
-            <a href="#furnished" onClick={() => setHighlightedRoom(null)}>
-              הדירה מרוהטת
-            </a>
-          </nav>
         </motion.div>
-
-        <StateHeading
-          id="empty"
-          title="תמונות כאשר הדירה ריקה"
-          subtitle="סיור בכל חדרי הדירה כשהיא ריקה ומוכנה לכניסה"
-        />
-        {sections.map((section) => (
-          <Section
-            key={section.id}
-            {...section}
-            pairedLink={
-              furnishedPhotos.some((p) => p.room === section.id)
-                ? {
-                    href: `#furnished-${section.id}`,
-                    label: "לצפייה בחדר כשהוא מרוהט",
-                    onClick: () => setHighlightedRoom(section.id),
-                  }
-                : undefined
-            }
-          />
-        ))}
 
         <StateHeading
           id="furnished"
@@ -447,8 +484,21 @@ export default function ApartmentListingPage() {
         />
         <PhotoGallery
           photos={furnishedPhotos}
-          highlightedRoom={highlightedRoom}
-          onClearHighlight={() => setHighlightedRoom(null)}
+          highlightedRoom={highlightedFurnished}
+          onClearHighlight={() => setHighlightedFurnished(null)}
+          onShowEmptyRoom={setHighlightedEmpty}
+        />
+
+        <StateHeading
+          id="empty"
+          title="תמונות כאשר הדירה ריקה"
+          subtitle="סיור בכל חדרי הדירה כשהיא ריקה ומוכנה לכניסה"
+        />
+        <VideoGallery
+          rooms={sections}
+          highlightedRoom={highlightedEmpty}
+          onClearHighlight={() => setHighlightedEmpty(null)}
+          onShowFurnishedRoom={setHighlightedFurnished}
         />
       </main>
 
